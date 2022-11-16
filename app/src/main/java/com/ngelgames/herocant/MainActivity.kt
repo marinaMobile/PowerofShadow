@@ -1,12 +1,9 @@
 package com.ngelgames.herocant
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.ConfigurationCompat
-import androidx.work.Configuration
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
@@ -33,9 +30,20 @@ class MainActivity : AppCompatActivity() {
         bindMainAct = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindMainAct.root)
         GlobalScope.launch(Dispatchers.IO) {
-            runBlocking {
                 job
-            }
+        }
+
+        val set = getSharedPreferences("PREFS_NAME", 0)
+
+
+
+        if (set.getBoolean("my_first_time", true)) {
+
+           AppsFlyerLib.getInstance()
+                .init("Aax8r92Rg4Fz8QpENmddFL", conversionDataListener, applicationContext)
+                AppsFlyerLib.getInstance().start(this@MainActivity)
+
+            set.edit().putBoolean("my_first_time", false).apply()
         }
 
     }
@@ -48,11 +56,6 @@ class MainActivity : AppCompatActivity() {
             Hawk.put(MAIN_ID, adIdInfo)
     }
 
-    private fun initApps() {
-        AppsFlyerLib.getInstance()
-            .init(Hawk.get(appsKey), conversionDataListener, applicationContext)
-        AppsFlyerLib.getInstance().start(this@MainActivity)
-    }
 
     //Data API
     private suspend fun getData(): String? {
@@ -98,47 +101,43 @@ class MainActivity : AppCompatActivity() {
         val countyCode: String = getData().toString()
         val countriesPool = getDataDev().toString()
         val appsCh = Hawk.get(appsCheck, "null")
-        val naming = Hawk.get(C1, "null")
+        val naming: String? = Hawk.get(C1)
 
+        getAdId()
         if (appsCh == "1") {
-            getAdId()
-            val set = getSharedPreferences("PREFS_NAME", 0)
-
-            if (set.getBoolean("my_first_time", true)) {
-
-                initApps()
-                val executorService = Executors.newSingleThreadScheduledExecutor()
-                executorService.scheduleAtFixedRate({
-                    if (naming != null) {
-                        Log.d("TestInUIHawk", naming)
-                        Log.d("AppsChecker", "naming: $naming")
-                        if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
-                            Log.d("Apps Checker", "naming: $naming")
-                            executorService.shutdown()
-                            startActivity(Intent(this@MainActivity, ITIS::class.java))
-                            finish()
-                        } else {
-                            executorService.shutdown()
-                            startActivity(Intent(this@MainActivity, URam::class.java))
-                            finish()
-                        }
+            val executorService = Executors.newSingleThreadScheduledExecutor()
+            executorService.scheduleAtFixedRate({
+                if (naming != null) {
+                    Log.d("TestInUIHawk", naming)
+                    if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
+                        Log.d("Apps Checker", "naming: $naming")
+                        executorService.shutdown()
+                        startActivity(Intent(this@MainActivity, ITIS::class.java))
+                        finish()
                     } else {
-                        Log.d("TestInUIHawk", "Received null")
+                        executorService.shutdown()
+                        startActivity(Intent(this@MainActivity, URam::class.java))
+                        finish()
                     }
-                }, 0, 2, TimeUnit.SECONDS)
-                Log.d("FirstInit", naming)
-                set.edit().putBoolean("my_first_time", false).apply()
-            } else {
-                if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
-                    Log.d("Apps Checker of second open", "naming: $naming")
-                    startActivity(Intent(this@MainActivity, ITIS::class.java))
-                    finish()
                 } else {
-                    startActivity(Intent(this@MainActivity, URam::class.java))
-                    finish()
+                    Log.d("TestInUIHawk", "Received null")
                 }
-            }
-        } else if (countriesPool.contains(countyCode)) {
+
+            }, 0, 2, TimeUnit.SECONDS)
+        }
+
+//            else {
+//                if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
+//                        Log.d("Apps Checker of second open", "naming: $naming")
+//                        startActivity(Intent(this@MainActivity, ITIS::class.java))
+//                        finish()
+//                    } else {
+//                        startActivity(Intent(this@MainActivity, URam::class.java))
+//                        finish()
+//                    }
+//                }
+
+         else if (countriesPool.contains(countyCode)) {
             startActivity(Intent(this@MainActivity, ITIS::class.java))
             finish()
         } else {
@@ -150,13 +149,13 @@ class MainActivity : AppCompatActivity() {
 
     val conversionDataListener = object : AppsFlyerConversionListener {
         override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
-
+            Log.d("dev_test", "onConversionDataHUISOSI: ${data.toString()}")
             val dataGotten = data?.get("campaign").toString()
             Hawk.put(C1, dataGotten)
         }
 
         override fun onConversionDataFail(p0: String?) {
-
+            Log.e("dev_test", "error getting conversion data: $p0" );
         }
 
         override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
