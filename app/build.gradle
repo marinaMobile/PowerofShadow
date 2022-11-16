@@ -58,4 +58,10 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.gms:play-services-appset:16.0.1'
     implementation 'com.airbnb.android:lottie:5.0.3'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation "com.appsflyer:af-android-sdk:6.9.0"
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+
 }

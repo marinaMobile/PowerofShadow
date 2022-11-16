@@ -21,3 +21,6 @@
 #Lottie
 -dontwarn com.airbnb.lottie.**
 -keep class com.airbnb.lottie.** {*;}
+#AppsFlyer
+-keep class com.appsflyer.** { *; }
+-keep public class com.android.installreferrer.** { *; }

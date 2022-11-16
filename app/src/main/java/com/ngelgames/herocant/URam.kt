@@ -2,10 +2,13 @@ package com.ngelgames.herocant
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ngelgames.herocant.databinding.ActivityUramBinding
 
 class URam : AppCompatActivity() {
+    lateinit var iGamerBind: ActivityUramBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_uram)
+        iGamerBind = ActivityUramBinding.inflate(layoutInflater)
+        setContentView(iGamerBind.root)
     }
 }

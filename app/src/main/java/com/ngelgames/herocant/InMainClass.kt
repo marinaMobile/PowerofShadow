@@ -10,15 +10,15 @@ import java.util.*
 class InMainClass : Application() {
     companion object {
         const val dfwthyhyj = "81486002471202890054"
-        const val grhtyhyddd = "1b4b"
         const val jglfkdkdkgjd = "2bfc44b5-305b-49c1-92d9-7002a90fea3b"
+        var appsKey = "appsKey"
+        var appsCheck = "appsChecker"
+        var C1: String? = "c11"
 
-
-        val lkflflflds = "http://powerof"
-        val lnlnlnlnlnlnln = "shadow.xyz/go.php?to=1&"
         var myID: String? = "myID"
         var instId: String? = "instID"
-
+        var link = "link"
+        var MAIN_ID: String? = ""
     }
 
     override fun onCreate() {
@@ -30,6 +30,7 @@ class InMainClass : Application() {
         OneSignal.setAppId(jglfkdkdkgjd)
 
         Hawk.init(this).build()
+
 
         val settings = getSharedPreferences("PREFS_NAME", 0)
 
@@ -48,5 +49,7 @@ class InMainClass : Application() {
             trackerParams.setCustomUserId(IDIN)
         }
         MyTracker.initTracker(dfwthyhyj, this)
+
+
     }
 }

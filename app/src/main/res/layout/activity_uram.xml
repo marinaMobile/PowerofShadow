@@ -4,6 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".URam">
+    tools:context=".URam"
+    android:background="@drawable/back">
+
+
+
+
+            <EditText
+                android:id="@+id/nameET"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:fontFamily="@font/playfair"
+                android:hint="Enter your name"
+                android:gravity="center"
+                android:textColor="#68FFFFFF"
+                android:textColorHint="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:textColor="#FFEB3B"
+        app:layout_constraintTop_toBottomOf="@id/nameET"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Play the game"
+        android:fontFamily="@font/playfair"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/playfair"
+        android:gravity="center"
+        android:shadowColor="@color/white"
+        android:shadowDx="-2"
+        android:shadowDy="-2"
+        android:shadowRadius="10"
+        android:text="@string/app_name"
+        android:textAllCaps="true"
+        android:textColor="#FFEB3B"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/nameET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
