@@ -10,5 +10,7 @@ class URam : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         iGamerBind = ActivityUramBinding.inflate(layoutInflater)
         setContentView(iGamerBind.root)
+
+
     }
 }

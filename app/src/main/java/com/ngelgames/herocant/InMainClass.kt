@@ -1,9 +1,6 @@
 package com.ngelgames.herocant
 
 import android.app.Application
-import android.util.Log
-import com.appsflyer.AppsFlyerConversionListener
-import com.appsflyer.AppsFlyerLib
 import com.my.tracker.MyTracker
 import com.onesignal.OneSignal
 import com.orhanobut.hawk.Hawk

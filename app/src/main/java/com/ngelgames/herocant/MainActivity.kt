@@ -51,10 +51,9 @@ class MainActivity : AppCompatActivity() {
     private suspend fun getData(): String? {
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://ip-api.com/")
+            .baseUrl("http://pro.ip-api.com/")
             .build()
             .create(ApiInterface::class.java)
-
 
         val retData = retrofitBuilder.getData().body()?.countryCode
         Log.d("Data", "countryCode: $retData ")
