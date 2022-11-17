@@ -21,5 +21,4 @@ data class GeoDev(
     val geo: String,
     val view: String,
     val appsChecker: String,
-    val appskey: String
 )
