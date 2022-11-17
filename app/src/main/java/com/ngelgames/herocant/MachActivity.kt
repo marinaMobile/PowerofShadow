@@ -25,8 +25,6 @@ class MachActivity : AppCompatActivity() {
     private lateinit var gb46j: TextView
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindMachineGame = ActivityMachBinding.inflate(layoutInflater)

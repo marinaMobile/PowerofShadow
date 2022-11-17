@@ -3,6 +3,7 @@ package com.ngelgames.herocant
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.ngelgames.herocant.databinding.ActivityUramBinding
 
 class URam : AppCompatActivity() {
@@ -12,10 +13,20 @@ class URam : AppCompatActivity() {
         iGamerBind = ActivityUramBinding.inflate(layoutInflater)
         setContentView(iGamerBind.root)
 
+        val nameTxt = iGamerBind.nameET
+
         iGamerBind.strtGm.setOnClickListener{
-            startActivity(Intent(this, MachActivity::class.java))
-            finish()
+            if (nameTxt.equals("")) {
+                Toast.makeText(this, "Name field is empty", Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent()
+                intent.putExtra("name", nameTxt.toString())
+                startActivity(Intent(this, MachActivity::class.java))
+                finish()
+
+            }
         }
+        iGamerBind.nameET.text
 
     }
 }
