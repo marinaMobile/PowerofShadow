@@ -284,7 +284,7 @@ class ITIS : AppCompatActivity() {
         val kiokjjlikjhmkij = Build.VERSION.RELEASE
 
         val linkAB = Hawk.get(link, "null")
-        var aft =""
+        var aft: String = ""
         if (checkFly == "1"){
         aft =
             "$linkAB$subOne$cpOne&$one$afId&$thrhtrhtrhtrht$mainId&$fofofofofofofofofo$pack&$fififififififififif$kiokjjlikjhmkij&$sisisisifsisis$lololololololo"

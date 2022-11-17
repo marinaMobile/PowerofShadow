@@ -1,5 +1,6 @@
 package com.ngelgames.herocant
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ngelgames.herocant.databinding.ActivityUramBinding
@@ -11,6 +12,10 @@ class URam : AppCompatActivity() {
         iGamerBind = ActivityUramBinding.inflate(layoutInflater)
         setContentView(iGamerBind.root)
 
+        iGamerBind.strtGm.setOnClickListener{
+            startActivity(Intent(this, MachActivity::class.java))
+            finish()
+        }
 
     }
 }

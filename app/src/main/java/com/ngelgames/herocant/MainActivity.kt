@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    naming = Hawk.get(C1)
+                    naming =  Hawk.get(C1)
                     Log.d("TestInUIHawk", "Received null $naming")
                 }
 
@@ -128,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onConversionDataFail(p0: String?) {
-            Log.e("dev_test", "error getting conversion data: $p0" );
         }
 
         override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
