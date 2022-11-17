@@ -53,3 +53,11 @@
 -dontwarn com.google.appengine.**
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.**
+
+# Appsflyer
+-dontwarn com.appsflyer.AFKeystoreWrapper
+
+-keepnames class * implements android.os.Parcelable
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final *** CREATOR;
+}

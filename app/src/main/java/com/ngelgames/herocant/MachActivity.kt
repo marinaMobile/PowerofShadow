@@ -1,5 +1,6 @@
 package com.ngelgames.herocant
 
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +24,7 @@ class MachActivity : AppCompatActivity() {
     private lateinit var ferhjg: ImageView
     private lateinit var bhtyhj57k: ImageView
     private lateinit var gb46j: TextView
+    private lateinit var name: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,14 @@ class MachActivity : AppCompatActivity() {
         bindMachineGame.imvThree.also { bhtyhj57k = it }
         bindMachineGame.scoreText.also { gb46j = it }
         gb46j.text = starterScore.toString()
+        bindMachineGame.nameText.also { name = it }
+
+        val intent: Intent = intent
+        val ext: Bundle? = intent.extras
+
+        if(ext != null) {
+            name.text = ext.getString("name")
+        }
 
         bindMachineGame.rollBtn.setOnClickListener{
             val minus1k: Int = starterScore-1000
@@ -118,7 +128,7 @@ class MachActivity : AppCompatActivity() {
 
         if (ufherhfoerhf1 == ufherhfoerhf2 && ufherhfoerhf2 == ufherhfoerhf3) {
             val plus10k: Int = gb46j.text.toString().toInt()+10000
-            Toast.makeText(this, "JACKPOT! +10000", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "+10000", Toast.LENGTH_SHORT).show()
             gb46j.text=plus10k.toString()
         }
         if(ufherhfoerhf1 == ufherhfoerhf2 || ufherhfoerhf2 == ufherhfoerhf3 || ufherhfoerhf1 == ufherhfoerhf3) {
