@@ -14,6 +14,7 @@ import com.appsflyer.AppsFlyerLib
 import com.google.android.material.snackbar.Snackbar
 import com.ngelgames.herocant.InMainClass.Companion.C1
 import com.ngelgames.herocant.InMainClass.Companion.MAIN_ID
+import com.ngelgames.herocant.InMainClass.Companion.appsCheck
 import com.ngelgames.herocant.InMainClass.Companion.link
 import com.ngelgames.herocant.databinding.ActivityItisBinding
 import com.onesignal.OneSignal
@@ -255,10 +256,10 @@ class ITIS : AppCompatActivity() {
 
         val myTrID: String? = Hawk.get(InMainClass.myID, "null")
         val myInstId: String? = Hawk.get(InMainClass.instId, "null")
-        val cpOne:String? = Hawk.get(C1, "null")
+        val cpOne:String? = Hawk.get(C1)
         val mainId: String? = Hawk.get(MAIN_ID, "null")
 
-        val checkFly: String = Hawk.get(InMainClass.appsCheck, "null")
+        val checkFly: String = Hawk.get(InMainClass.appsCheck)
 
         val afId = AppsFlyerLib.getInstance().getAppsFlyerUID(this)
 
@@ -284,6 +285,7 @@ class ITIS : AppCompatActivity() {
         val kiokjjlikjhmkij = Build.VERSION.RELEASE
 
         val linkAB: String = Hawk.get(link)
+
         var aft = ""
         if (checkFly == "1"){
         aft =

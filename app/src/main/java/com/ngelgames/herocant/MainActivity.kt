@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private val job: Job = GlobalScope.launch(Dispatchers.IO) {
         val countyCode: String = getData().toString()
         val countriesPool = getDataDev().toString()
-        val appsCh = Hawk.get(appsCheck, "null")
+        val appsCh: String? = Hawk.get(appsCheck)
         var naming: String? = Hawk.get(C1)
 
         getAdId()
